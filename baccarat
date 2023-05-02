@@ -161,9 +161,7 @@ def baccaratsim():
         else:
             print("Banker Win")
             Win = 'B'
-    # At this pont, current win is stored in Win
-    # last element = str(winlist[len(winlist-1)])
-    # [x,y] is the place of last stamp
+    # At this point, current win is stored in Win
                 
     winlist.append(Win)
     print(winlist)
