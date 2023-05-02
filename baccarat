@@ -1,7 +1,226 @@
-echo "# project1" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/chris-chaa/project1.git
-git push -u origin main
+import random
+import turtle
+
+#top left start
+t = turtle.Turtle()
+t.speed (0)
+
+#x and y chart
+t.penup()
+t.backward(450)
+t.right(90)
+t.forward(210)
+t.left(90)
+t.pendown()
+t.forward(900)
+t.backward(900)
+t.left(90)
+t.forward(510)
+t.backward(510)
+t.right(90)
+
+#columns
+for x in range(0,30):
+    t.forward(30)
+    t.left(90)
+    t.forward(510)
+    t.backward(510)
+    t.right(90)
+t.left(90)
+t.forward(510)
+t.left(90)
+t.forward(900)
+
+#rows
+t.left(90)
+for x in range(0,16):
+    t.forward(30)
+    t.left(90)
+    t.forward(900)
+    t.backward(900)
+    t.right(90)
+t.backward(480)
+t.left(90)
+
+#get to first stamp position
+t.forward(15)
+t.right(90)
+t.penup()
+t.forward(15)
+t.left(90)
+t.hideturtle()
+
+
+card_values = {"A":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":0,"J":0,"Q":0,"K":0}
+deck = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+total_cards = deck * 8
+print("There will be 8 decks shuffled inside this simulation of Baccarat")
+newplayerscore=0
+newbankerscore=0
+
+winlist= []
+##### code for baccarat simulation below
+def baccaratsim():
+    y = 0
+    Win = 'B'
+    player_hand1= random.choice(total_cards)
+    player_hand2= random.choice(total_cards)
+    point1 = card_values.get(player_hand1)
+    point2 = card_values.get(player_hand2)
+    print("Player Side")
+    print(player_hand1, "=", point1, player_hand2, "=", point2)
+    print(point1 ,"+", point2)
+    newplayerscore = ((int(point1) + int(point2))%10)
+    print("Player Side Score :", newplayerscore )
+    # remove card from deck
+    total_cards.remove(player_hand1)
+    total_cards.remove(player_hand2)
+
+    # get player 2 hand value
+    banker_hand1= random.choice(total_cards)
+    banker_hand2= random.choice(total_cards)
+    bankerpoint1 = card_values.get(banker_hand1)
+    bankerpoint2 = card_values.get(banker_hand2)
+    print("Banker Side")
+    print(banker_hand1, "=", bankerpoint1, banker_hand2, "=", bankerpoint2)
+    print(bankerpoint1 ,"+", bankerpoint2)
+    newbankerscore = ((int(bankerpoint1) + int(bankerpoint2))%10)
+    print("Banker Side Score :", newbankerscore)
+    # remove card from deck
+    total_cards.remove(banker_hand1)    
+    total_cards.remove(banker_hand2)    
+
+    # win options
+    if newplayerscore in [8,9] and newbankerscore in [8,9]:
+        if newplayerscore > newbankerscore:
+            print("Player Natural Win")
+            Win = 'P'
+        elif newplayerscore == newbankerscore:
+            print("Natural Tie")
+            Win = 'T'
+        else:
+            print("Banker Natural Win")
+            Win = 'B'
+    if newplayerscore in [8,9] and newbankerscore <8:
+        print("Player Natural Win")
+        Win = 'P'
+    elif newbankerscore in [8,9] and newplayerscore <8:
+        print("Banker Natural Win")
+        Win = 'B'
+    elif newplayerscore in [0,1,2,3,4,5] :
+        player_hand3= random.choice(total_cards)
+        point3 = card_values.get(player_hand3)
+        print("")
+        print("Player Third Card: ")
+        print(player_hand1, "=", point1, player_hand2, "=", point2, player_hand3, '=', point3)
+        print(point1 ,"+", point2, "+", point3)
+        newplayerscore = ((int(point1) + int(point2) + int(point3))%10)
+        print("New Player Side Score :", newplayerscore )
+        total_cards.remove(player_hand3)
+
+        if (newbankerscore == 6 and point3 in [6, 7]) or \
+            (newbankerscore == 5 and point3 in [4,5,6,7]) or \
+            (newbankerscore == 4 and point3 in [2,3,4,5,6,7]) or \
+            (newbankerscore == 3 and point3 != 8) or \
+            (newbankerscore in [0, 1, 2]):
+            banker_hand3= random.choice(total_cards)
+            bankerpoint3= card_values.get(banker_hand3)
+            print("")
+            print("Banker Third Card: ")
+            print(banker_hand1, "=", bankerpoint1, banker_hand2, "=", bankerpoint2, banker_hand3, '=', bankerpoint3)
+            print(bankerpoint1 ,"+", bankerpoint2, "+", bankerpoint3)
+            newbankerscore = ((int(bankerpoint1) + int(bankerpoint2) + int(bankerpoint3))%10)
+            print("New Banker Side Score :", newbankerscore)
+            total_cards.remove(banker_hand3)
+        if newplayerscore > newbankerscore:
+            print("Player Win")
+            Win = 'P'
+        elif newplayerscore == newbankerscore:
+            print("Tie")
+            Win = 'T'
+        else:
+            print("Banker Win")
+            Win = 'B'
+    elif newplayerscore in [6,7]:
+        if newbankerscore in [0,1,2,3,4,5]:
+            banker_hand3= random.choice(total_cards)
+            bankerpoint3= card_values.get(banker_hand3)
+            print("")
+            print("Banker Third Card: ")
+            print(banker_hand1, "=", bankerpoint1, banker_hand2, "=", bankerpoint2, banker_hand3, '=', bankerpoint3)
+            print(bankerpoint1 ,"+", bankerpoint2, "+", bankerpoint3)
+            newbankerscore = ((int(bankerpoint1) + int(bankerpoint2) + int(bankerpoint3))%10)
+            print("New Banker Side Score :", newbankerscore)
+            total_cards.remove(banker_hand3)
+        if newplayerscore > newbankerscore:
+            print("Player Win")
+            Win = 'P'
+        elif newplayerscore == newbankerscore:
+            print("Tie")
+            Win = 'T'
+        else:
+            print("Banker Win")
+            Win = 'B'
+    # At this pont, current win is stored in Win
+    # last element = str(winlist[len(winlist-1)])
+    # [x,y] is the place of last stamp
+                
+    winlist.append(Win)
+    print(winlist)
+    return Win
+    
+### baccarat simulation code ends
+
+money = 1000
+y = 0
+print("You will start with $1000")
+while money > 1:
+    userchoice = 0
+    while userchoice not in ['P', 'B', 'T']:
+        userchoice = input("Bet on Player, Banker, or Tie? Type P or B or T? ")
+    bet = int(input("How much to bet?"))
+    print("")
+    Win = baccaratsim()
+    if (Win == 'B'):
+        t.color('red')
+    if (Win == 'P'):
+        t.color('blue')
+    if (Win == 'T'):
+        t.color('green')
+    if (len(winlist) == 1):
+        t.shape("circle")
+        t.st()
+        t.stamp()
+    else:
+        if (Win == str(winlist[len(winlist)-2])):
+            t.right(90)
+            y = y + 30
+            t.forward(y)
+            t.stamp()
+            t.right(180)
+            t.forward(y)
+            t.right(90)
+        else:
+            y = 0
+            t.forward(30)
+            t.stamp()
+    if userchoice == 'P' and Win == 'P' or userchoice == 'B' and Win == 'B':
+        money += bet * 2
+        print("Money left: ", money)
+    elif userchoice == 'P' and Win == 'B' or userchoice == 'B' and Win == 'P':
+        money = money - bet
+        print("Money left: ", money)
+    elif userchoice == 'T' and Win == 'T':
+        money += bet * 8
+        print("Money left: ", money)
+    elif userchoice != 'T' and Win == 'T':
+        money = money - bet
+        print("Money left: ", money)
+    if len(total_cards) <20:
+        print("Deck is resetting as there is less than 20 cards left in the deck")
+        total_cards.clear()
+        total_cards = deck*8
+
+
+    print("#############################################################")
+
